@@ -2,7 +2,7 @@
 import { assertEquals, fail } from "https://deno.land/std@0.123.0/testing/asserts.ts"
 import { RSAService } from "./rsa.ts"
 
-Deno.test("should return a valid RSA Key Pair ", async () => {
+Deno.test("runs the keyGeneration and the encryption/decryption", async () => {
 
     const rsaService = new RSAService()
     const newRSAKeyPair = rsaService.generateKeyPair()
@@ -11,46 +11,20 @@ Deno.test("should return a valid RSA Key Pair ", async () => {
         fail(`I would have expected an RSA Key Pair`)
     }
 
-    console.log(newRSAKeyPair);
-
-    // to be made more concrete
-})
-
-
-Deno.test("should return the encrpyted message", async () => {
-
-    const rsaService = new RSAService()
-    const newRSAKeyPair = rsaService.generateKeyPair()
-
-    if (newRSAKeyPair === undefined) {
-        fail(`I would have expected an RSA Key Pair`)
-    }
-
-    const encryptedMessage = rsaService.encrypt(BigInt("9007199254740991"),newRSAKeyPair.privateKey)
+    const message = "9007199254740991"
+    const encryptedMessage = rsaService.encrypt(BigInt(message), newRSAKeyPair.privateKey)
 
     if (newRSAKeyPair === undefined) {
         fail(`I would have expected an encrypted message`)
     }
 
-    console.log(encryptedMessage);
-    
-})
-
-
-Deno.test("should return the decrypted message", async () => {
-
-    const rsaService = new RSAService()
-    const newRSAKeyPair = rsaService.generateKeyPair()
-
-    if (newRSAKeyPair === undefined) {
-        fail(`I would have expected an RSA Key Pair`)
-    }
-    const message = "9007199254740991"
-    const encryptedMessage = rsaService.encrypt(BigInt(message), newRSAKeyPair.privateKey)
     const decrypedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.publicKey)
 
-    console.log(message)
-    console.log(decrypedmessage)
+    if(message != decrypedmessage)
+    {
+        fail('decrypted message differs from original message')
+    }
+
 })
 
 Deno.test("should...", async () => {
