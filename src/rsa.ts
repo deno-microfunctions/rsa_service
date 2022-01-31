@@ -1,4 +1,6 @@
 import * as B from 'https://deno.land/x/bigint/mod.ts'
+import hashJs from 'https://deno.land/x/hash/mod-hashjs.ts'
+import { Buffer } from "https://deno.land/std@0.123.0/io/mod.ts";
 
 export interface key {
     N: bigint
@@ -10,7 +12,6 @@ export interface KeyPair {
 }
 
 export class RSAService {
-
 
     public generateKeyPair(keySize = 100) : KeyPair{
         // two distinct prime numbers are chosen as random
@@ -24,25 +25,48 @@ export class RSAService {
                 privateKey: {N : N,cryptionComponent : e}}
     }
 
-    public hashContent(): string {
-        return "tbd"
+    public hashContent(m:String): string {
+        let hash = hashJs.sha256().update(m).digest('hex')
+        return hash.toString()
     }
 
-    public sign(): any {
+    public sign(m:string, privateKey:key): any {
+        let hash = this.hashContent(m)
+        let hashDez = parseInt(hash, 16)
 
+        const signature = B.modPow(BigInt(hashDez), privateKey.cryptionComponent, privateKey.N)
+
+        return signature
     }
 
-    public encrypt(m:bigint, privateKey:key): any {
-        return B.modPow(m, privateKey.cryptionComponent, privateKey.N)
+    public encrypt(m:string, privateKey:key): BigInt[] {
+        let charlist: BigInt[] = [];
+
+        for (let char of m) {
+            let message = new TextEncoder().encode(char)
+            charlist.push(B.modPow(BigInt(message[0]), privateKey.cryptionComponent, privateKey.N))
+        }
+        return charlist
     }
 
-    public decrypt(c:bigint, publicKey:key): any {
-        return B.modPow(c, publicKey.cryptionComponent, publicKey.N)
+    public decrypt(c:any, publicKey:key): any {
+        let result: String = ""
+        for (let letter of c) {
+            let de: BigInt = B.modPow(letter, publicKey.cryptionComponent, publicKey.N)
+            result +=  new TextDecoder().decode(Uint8Array.of(Number(de)))
+        }
+
+        return result
     }
 
-    public validateAuthenticity(): any {
+    public validateAuthenticity(m:string, sign:bigint, publicKey:key): any {
+
+        let hash = this.hashContent(m)
+        let hashFromSignature = B.modPow(sign, publicKey.cryptionComponent, publicKey.N)
+        let hashDez = parseInt(hash, 16)
+        console.log("Signature valid:", hashDez == Number(hashFromSignature))
 
     }
-
 
 }
+

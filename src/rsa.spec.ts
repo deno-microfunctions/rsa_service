@@ -11,8 +11,11 @@ Deno.test("runs the keyGeneration and the encryption/decryption", async () => {
         fail(`I would have expected an RSA Key Pair`)
     }
 
-    const message = "9007199254740991"
-    const encryptedMessage = rsaService.encrypt(BigInt(message), newRSAKeyPair.privateKey)
+    const message = "Hallo"
+
+    const signature = rsaService.sign(message, newRSAKeyPair.privateKey)
+
+    const encryptedMessage = rsaService.encrypt(message, newRSAKeyPair.privateKey)
 
     if (newRSAKeyPair === undefined) {
         fail(`I would have expected an encrypted message`)
@@ -20,6 +23,8 @@ Deno.test("runs the keyGeneration and the encryption/decryption", async () => {
 
     const decrypedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.publicKey)
 
+    rsaService.validateAuthenticity(message, signature, newRSAKeyPair.publicKey)
+    
     if(message != decrypedmessage)
     {
         fail('decrypted message differs from original message')
