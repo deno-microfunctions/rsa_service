@@ -15,13 +15,13 @@ Deno.test("runs the keyGeneration and the encryption/decryption", async () => {
 
     const signature = rsaService.sign(message, newRSAKeyPair.privateKey)
 
-    const encryptedMessage = rsaService.encrypt(message, newRSAKeyPair.privateKey)
+    const encryptedMessage = rsaService.encrypt(message, newRSAKeyPair.publicKey)
 
     if (newRSAKeyPair === undefined) {
         fail(`I would have expected an encrypted message`)
     }
 
-    const decrypedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.publicKey)
+    const decrypedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.privateKey)
 
     rsaService.validateAuthenticity(message, signature, newRSAKeyPair.publicKey)
     
