@@ -8,20 +8,12 @@ Deno.test("runs the keyGeneration and the encryption/decryption", () => {
 
     a.assertExists(newRSAKeyPair, "I would have expected an RSA Key Pair")
 
-    const message = "Hallo"
+    const message = "Hello World!"
     const signature = rsaService.sign(message, newRSAKeyPair.privateKey)
     const encryptedMessage = rsaService.encrypt(message, newRSAKeyPair.publicKey)
-    const decrypedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.privateKey)
+    const decryptedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.privateKey)
 
     a.assertEquals(rsaService.validateAuthenticity(message, signature, newRSAKeyPair.publicKey), true)
-    a.assertEquals(message, decrypedmessage, "decrypted message differs from original message")
-
-})
-
-Deno.test("should...", async () => {
-
-})
-
-Deno.test("should...", async () => {
+    a.assertEquals(message, decryptedmessage, "decrypted message differs from original message")
 
 })
