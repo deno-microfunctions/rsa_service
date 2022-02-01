@@ -1,6 +1,5 @@
 import * as B from 'https://deno.land/x/bigint/mod.ts'
 import hashJs from 'https://deno.land/x/hash/mod-hashjs.ts'
-import { Buffer } from "https://deno.land/std@0.123.0/io/mod.ts";
 
 export interface privateKey {
     N: bigint
@@ -35,7 +34,7 @@ export class RSAService {
         return hash.toString()
     }
 
-    public sign(m:string, key:privateKey): any {
+    public sign(m:string, key:privateKey): bigint {
         let hash = this.hashContent(m)
         let hashDez = parseInt(hash, 16)
 
@@ -44,34 +43,34 @@ export class RSAService {
         return signature
     }
 
-    public encrypt(m:string, key:publicKey): BigInt[] {
-        let charlist: BigInt[] = [];
+    public encrypt(m:string, key:publicKey): bigint[] {
+        let intList: bigint[] = [];
 
         for (let char of m) {
             let message = new TextEncoder().encode(char)
-            charlist.push(B.modPow(BigInt(message[0]), key.E, key.N))
+            intList.push(B.modPow(BigInt(message[0]), key.E, key.N))
         }
-        return charlist
+        return intList
     }
 
-    public decrypt(c:any, key:privateKey): any {
+    public decrypt(c:bigint[], key:privateKey): String {
         let result: String = ""
 
-        for (let letter of c) {
-            let de: BigInt = B.modPow(letter, key.D, key.N)
-            result +=  new TextDecoder().decode(Uint8Array.of(Number(de)))
+        for (let encrypted of c) {
+            let decyphered: BigInt = B.modPow(encrypted, key.D, key.N)
+            result +=  new TextDecoder().decode(Uint8Array.of(Number(decyphered)))
         }
 
         return result
     }
 
-    public validateAuthenticity(m:string, sign:bigint, key:publicKey): any {
+    public validateAuthenticity(m:string, sign:bigint, key:publicKey): Boolean {
 
         let hash = this.hashContent(m)
         let hashFromSignature = B.modPow(sign, key.E, key.N)
         let hashDez = parseInt(hash, 16)
-        console.log("Signature valid:", hashDez == Number(hashFromSignature))
 
+        return hashDez == Number(hashFromSignature)
     }
 
 }
