@@ -1,33 +1,19 @@
-
-import { assertEquals, fail } from "https://deno.land/std@0.123.0/testing/asserts.ts"
+import * as a from "https://deno.land/std@0.123.0/testing/asserts.ts"
 import { RSAService } from "./rsa.ts"
 
-Deno.test("should return a valid RSA Key Pair ", async () => {
+Deno.test("runs the keyGeneration and the encryption/decryption", () => {
 
     const rsaService = new RSAService()
     const newRSAKeyPair = rsaService.generateKeyPair()
 
-    if (newRSAKeyPair === undefined) {
-        fail(`I would have expected an RSA Key Pair`)
-    }
+    a.assertExists(newRSAKeyPair, "I would have expected an RSA Key Pair")
 
-    // to be made more concrete
-})
+    const message = "Hello World!"
+    const signature = rsaService.sign(message, newRSAKeyPair.privateKey)
+    const encryptedMessage = rsaService.encrypt(message, newRSAKeyPair.publicKey)
+    const decryptedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.privateKey)
 
-
-Deno.test("should...", async () => {
-
-})
-
-
-Deno.test("should...", async () => {
-
-})
-
-Deno.test("should...", async () => {
-
-})
-
-Deno.test("should...", async () => {
+    a.assertEquals(rsaService.validateAuthenticity(message, signature, newRSAKeyPair.publicKey), true)
+    a.assertEquals(message, decryptedmessage, "decrypted message differs from original message")
 
 })
