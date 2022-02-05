@@ -9,7 +9,7 @@ Deno.test("runs the keyGeneration and the encryption/decryption", () => {
     a.assertExists(newRSAKeyPair, "I would have expected an RSA Key Pair")
 
     const message = "Hello World!"
-    const signature = rsaService.sign(message, newRSAKeyPair.privateKey)
+    const signature = rsaService.createSignature(message, newRSAKeyPair.privateKey)
     const encryptedMessage = rsaService.encrypt(message, newRSAKeyPair.publicKey)
     const decryptedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.privateKey)
 

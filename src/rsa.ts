@@ -34,7 +34,7 @@ export class RSAService {
         return hash.toString()
     }
 
-    public sign(m:string, key:privateKey): bigint {
+    public createSignature(m:string, key:privateKey): bigint {
         let hash = this.hashContent(m)
         let hashDez = parseInt(hash, 16)
 

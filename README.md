@@ -8,15 +8,18 @@ import { RSAService } from "https://raw.githubusercontent.com/deno-microfunction
 const rsaService = new RSAService()
 const newRSAKeyPair = rsaService.generateKeyPair()
 
-const message = "Hello World!" // Message to be encrypted
+const message = "Hello World!" // Message to encrypt
 
 // Generate signature
-const signature = rsaService.sign(message, newRSAKeyPair.privateKey) // encrypted sha256 hash of signature
+const signature = rsaService.createSignature(message, newRSAKeyPair.privateKey) // encrypted sha256 hash of signature
 
 // Encrypt
-const encryptedMessage = rsaService.encrypt(message, newRSAKeyPair.publicKey) // returns with public key encrypted message
+const encryptedMessage = rsaService.encrypt(message, newRSAKeyPair.publicKey) // returns encrypted message
 // Decrypt
-const decryptedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.privateKey) // returns with private key decrypted message
+const decryptedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.privateKey) // returns decrypted message
+
+// Validate with signature
+const isAuthentic = rsaService.validateAuthenticity(message, signature, publicKey)
 ```
 
 ## Execute Unit tests
