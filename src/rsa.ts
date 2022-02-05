@@ -64,7 +64,7 @@ export class RSAService {
         return result
     }
 
-    public validateAuthenticity(m:string, sign:bigint, key:publicKey): Boolean {
+    public validateAuthenticity(m:String, sign:bigint, key:publicKey): Boolean {
 
         let hash = this.hashContent(m)
         let hashFromSignature = B.modPow(sign, key.E, key.N)

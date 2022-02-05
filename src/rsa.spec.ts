@@ -13,7 +13,7 @@ Deno.test("runs the keyGeneration and the encryption/decryption", () => {
     const encryptedMessage = rsaService.encrypt(message, newRSAKeyPair.publicKey)
     const decryptedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.privateKey)
 
-    a.assertEquals(rsaService.validateAuthenticity(message, signature, newRSAKeyPair.publicKey), true)
+    a.assertEquals(rsaService.validateAuthenticity(decryptedmessage, signature, newRSAKeyPair.publicKey), true)
     a.assertEquals(message, decryptedmessage, "decrypted message differs from original message")
 
 })
