@@ -19,7 +19,7 @@ const encryptedMessage = rsaService.encrypt(message, newRSAKeyPair.publicKey) //
 const decryptedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.privateKey) // returns decrypted message
 
 // Validate with signature
-const isAuthentic = rsaService.validateAuthenticity(message, signature, publicKey)
+const isAuthentic = rsaService.validateAuthenticity(message, signature, newRSAKeyPair.publicKey)
 ```
 
 ## Execute Unit tests
