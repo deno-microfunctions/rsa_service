@@ -2,7 +2,7 @@
 
 ## Usage Example
 
-```sh
+```ts
 import { RSAService } from "https://raw.githubusercontent.com/deno-microfunctions/rsa/main/src/rsa.ts"
 
 const rsaService = new RSAService()
