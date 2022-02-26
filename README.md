@@ -22,6 +22,11 @@ const decryptedmessage = rsaService.decrypt(encryptedMessage, newRSAKeyPair.priv
 const isAuthentic = rsaService.validateAuthenticity(decryptedmessage, signature, newRSAKeyPair.publicKey)
 ```
 
+## Execute Usage Example
+```sh
+deno run https://deno.land/x/rsa_service/usage-example.ts
+```
+
 ## Execute Unit tests
 ```sh
 deno test https://github.com/deno-microfunctions/rsa/blob/main/src/rsa.spec.ts
