@@ -24,5 +24,5 @@ const isAuthentic = rsaService.validateAuthenticity(decryptedmessage, signature,
 
 ## Execute Unit tests
 ```sh
-deno test src/rsa.spec.ts
+deno test https://github.com/deno-microfunctions/rsa/blob/main/src/rsa.spec.ts
 ```
